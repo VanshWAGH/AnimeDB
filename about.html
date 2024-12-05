@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Anime Database Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            background: linear-gradient(120deg, #1a1a1a, #3b3b3b);
+            overflow-x: hidden;
+            overflow-y: scroll;
+        }
+
+        .background-image {
+            background-image: url("luffy.png"); /* Ensure the image path is correct */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: -1;
+            filter: brightness(0.3);
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 1.5rem 2rem;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .navbar .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #e50914;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .navbar .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .navbar .nav-links li {
+            margin-left: 1.8rem;
+        }
+
+        .navbar .nav-links a {
+            color: #ddd;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .navbar .nav-links a:hover {
+            color: #e50914;
+            transform: scale(1.1);
+        }
+
+        /* Content Section */
+        .content-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 7rem; /* Space for fixed navbar */
+            padding-bottom: 3rem;
+            text-align: center;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        /* Flashcards */
+        .flash-card {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            padding: 3rem;
+            width: 85%;
+            max-width: 900px;
+            margin-bottom: 3rem;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.6);
+            color: #ddd;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: fadeUp 1s forwards ease-in;
+        }
+
+        .flash-card:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+        .flash-card:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+        .flash-card:nth-child(3) {
+            animation-delay: 0.7s;
+        }
+        .flash-card:nth-child(4) {
+            animation-delay: 0.9s;
+        }
+
+        .flash-card h2 {
+            font-size: 2.4rem;
+            color: #e50914;
+            margin-bottom: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .flash-card p, .flash-card ul {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #ccc;
+        }
+
+        .flash-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .flash-card ul li {
+            margin: 0.8rem 0;
+            font-size: 1.1rem;
+            color: #e50914;
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Background Image -->
+    <div class="background-image"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">AnimeDB</div>
+        <ul class="nav-links">
+            <li><a href="index.php">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="genres.html">Genres</a></li>
+            <li><a href="#">My List</a></li>
+        </ul>
+    </nav>
+
+    <!-- Content Section -->
+    <div class="content-section">
+
+        <!-- Project Introduction Flashcard -->
+        <div class="flash-card">
+            <h2>Welcome to AnimeDB</h2>
+            <p>AnimeDB is a web-based platform built to manage and track your anime titles. Keep a record of anime you've watched, are currently watching, or plan to watch. Manage details like genre, ratings, reviews, and more!</p>
+        </div>
+
+        <!-- Project Overview Flashcard -->
+        <div class="flash-card">
+            <h2>Project Overview</h2>
+            <p>This project helps users organize their anime collection in a beautiful, easy-to-use interface. With CRUD (Create, Read, Update, Delete) operations and a dynamic database, AnimeDB is a powerful tool for any anime fan.</p>
+        </div>
+
+        <!-- Features Flashcard -->
+        <div class="flash-card">
+            <h2>Key Features</h2>
+            <ul>
+                <li>Store and manage your favorite anime.</li>
+                <li>Track your progress and status (Watching, Completed, etc.).</li>
+                <li>Sort by genre, release year, or ratings.</li>
+                <li>Leave reviews and feedback for each anime.</li>
+                <li>Responsive design for all devices.</li>
+            </ul>
+        </div>
+
+        <!-- Technical Details Flashcard -->
+        <div class="flash-card">
+            <h2>Technical Details</h2>
+            <p>AnimeDB is built using PHP and PDO for secure and efficient database management. The system uses modern web technologies to provide a seamless experience for users, allowing them to manage their anime data easily and securely.</p>
+        </div>
+
+    </div>
+
+</body>
+</html>

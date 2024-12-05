@@ -1,0 +1,140 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Background Video */
+body {
+    font-family: Arial, sans-serif;
+    color: #fff;
+    overflow-x: hidden;
+    position: relative;
+}
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.background-overlay video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.5);
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+.navbar .logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #f40612;
+}
+.navbar .nav-links {
+    list-style: none;
+    display: flex;
+}
+.navbar .nav-links li {
+    margin-left: 1.5rem;
+}
+.navbar .nav-links li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+.navbar .nav-links li a:hover {
+    color: #f40612;
+}
+
+/* Main Content */
+.main-content {
+    text-align: center;
+    padding: 2rem;
+    margin-top: 5rem;
+}
+
+/* Flash Card Form */
+.flash-card {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2rem;
+    width: 100%;
+    max-width: 500px;
+    margin: 2rem auto;
+    border-radius: 8px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+    transform: translateZ(0px);
+    transition: transform 0.5s ease;
+    color: #333;
+}
+.flash-card:hover {
+    transform: translateZ(20px) scale(1.02);
+}
+.flash-card h2 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+.flash-card input, .flash-card textarea, .flash-card select, .flash-card button {
+    display: block;
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: none;
+}
+.flash-card input, .flash-card select, .flash-card textarea {
+    background: #f5f5f5;
+    color: #333;
+}
+.flash-card button {
+    background: #f40612;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.flash-card button:hover {
+    background: #d90404;
+}
+
+/* Anime List */
+#anime-list {
+    margin-top: 2rem;
+    width: 90%;
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background: rgba(35, 33, 33, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    overflow-x: auto;
+}
+#anime-list table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #fff;
+}
+#anime-list th, #anime-list td {
+    padding: 1rem;
+    border: 1px solid #333;
+    text-align: center;
+}
+#anime-list th {
+    background: #f40612;
+}
+#anime-list td {
+    background: rgba(255, 255, 255, 0.1);
+}
