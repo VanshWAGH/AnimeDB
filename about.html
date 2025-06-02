@@ -4,8 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About - Anime Database Management</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #e50914;
+            --primary-dark: #b20710;
+            --secondary: #00a8e8;
+            --dark: #141414;
+            --dark-gray: #222;
+            --light-gray: #333;
+            --text: #fff;
+            --text-secondary: #e5e5e5;
+            --card-bg: rgba(0, 0, 0, 0.85);
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -15,24 +28,46 @@
         body, html {
             height: 100%;
             font-family: 'Poppins', sans-serif;
-            color: white;
-            background: linear-gradient(120deg, #1a1a1a, #3b3b3b);
+            color: var(--text);
+            background: var(--dark);
             overflow-x: hidden;
-            overflow-y: scroll;
         }
 
-        .background-image {
-            background-image: url("luffy.png"); /* Ensure the image path is correct */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100%;
+        /* Background with parallax effect */
+        .background-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .background-image {
+            background-image: url("https://i.imgur.com/JQKZQYz.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            height: 110%;
+            width: 110%;
+            position: absolute;
+            top: -5%;
+            left: -5%;
+            filter: brightness(0.3) blur(3px);
+            transform: translateZ(0);
+            will-change: transform;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(20, 20, 20, 0.8) 0%, rgba(20, 20, 20, 0.9) 100%);
             z-index: -1;
-            filter: brightness(0.3);
         }
 
         /* Navbar */
@@ -41,178 +76,935 @@
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            padding: 1.5rem 2rem;
-            z-index: 10;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 100%);
+            padding: 1.2rem 5%;
+            z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 0.8rem 5%;
         }
 
         .navbar .logo {
-            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
             font-weight: 700;
-            color: #e50914;
+            color: var(--primary);
             text-transform: uppercase;
             letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar .logo:hover {
+            color: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .navbar .logo i {
+            margin-right: 10px;
+            font-size: 1.8rem;
         }
 
         .navbar .nav-links {
             list-style: none;
             display: flex;
+            align-items: center;
         }
 
         .navbar .nav-links li {
-            margin-left: 1.8rem;
+            margin-left: 2rem;
+            position: relative;
         }
 
         .navbar .nav-links a {
-            color: #ddd;
+            color: var(--text-secondary);
             text-decoration: none;
             font-size: 1rem;
-            transition: color 0.3s, transform 0.3s;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-block;
+            padding: 0.5rem 0;
         }
 
-        .navbar .nav-links a:hover {
-            color: #e50914;
-            transform: scale(1.1);
+        .navbar .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .navbar .nav-links a:hover::after,
+        .navbar .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .navbar .nav-links a:hover,
+        .navbar .nav-links a.active {
+            color: var(--text);
+        }
+
+        .navbar .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .navbar .hamburger:hover {
+            color: var(--primary);
         }
 
         /* Content Section */
         .content-section {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-top: 7rem; /* Space for fixed navbar */
-            padding-bottom: 3rem;
+            padding: 8rem 5% 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .page-header {
             text-align: center;
-            animation: fadeIn 1.5s ease-in-out;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
         }
 
         /* Flashcards */
         .flash-card {
-            background: rgba(0, 0, 0, 0.8);
+            background: var(--card-bg);
             border-radius: 15px;
             padding: 3rem;
-            width: 85%;
-            max-width: 900px;
+            width: 100%;
             margin-bottom: 3rem;
-            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.6);
-            color: #ddd;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            color: var(--text-secondary);
             transform: translateY(50px);
             opacity: 0;
-            animation: fadeUp 1s forwards ease-in;
+            transition: all 0.5s ease;
+            border-left: 5px solid var(--primary);
+            position: relative;
+            overflow: hidden;
         }
 
-        .flash-card:nth-child(1) {
-            animation-delay: 0.3s;
+        .flash-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 65%, rgba(229, 9, 20, 0.1) 100%);
+            z-index: 0;
         }
-        .flash-card:nth-child(2) {
-            animation-delay: 0.5s;
-        }
-        .flash-card:nth-child(3) {
-            animation-delay: 0.7s;
-        }
-        .flash-card:nth-child(4) {
-            animation-delay: 0.9s;
+
+        .flash-card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .flash-card h2 {
-            font-size: 2.4rem;
-            color: #e50914;
-            margin-bottom: 1.2rem;
-            font-weight: 700;
-            text-transform: uppercase;
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
         }
 
-        .flash-card p, .flash-card ul {
-            font-size: 1.2rem;
+        .flash-card h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+
+        .flash-card p {
+            font-size: 1.1rem;
             line-height: 1.8;
-            color: #ccc;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
         }
 
         .flash-card ul {
             list-style: none;
             padding-left: 0;
+            margin: 1.5rem 0;
         }
 
         .flash-card ul li {
-            margin: 0.8rem 0;
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+            position: relative;
             font-size: 1.1rem;
-            color: #e50914;
+            color: var(--text-secondary);
+        }
+
+        .flash-card ul li::before {
+            content: '\f054';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-size: 0.8rem;
+            top: 5px;
+        }
+
+        /* Feature Cards */
+        .feature-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border-top: 3px solid var(--primary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(20px);
+            opacity: 0;
+        }
+
+        .feature-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px) !important;
+            box-shadow: 0 10px 25px rgba(229, 9, 20, 0.2);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .feature-card p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(229, 9, 20, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(229, 9, 20, 0.2);
+            transition: all 0.3s ease;
+            transform: translateY(20px);
+            opacity: 0;
+        }
+
+        .stat-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-card:hover {
+            background: rgba(229, 9, 20, 0.2);
+            transform: translateY(-5px) !important;
+        }
+
+        .stat-card .number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-card .label {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Team Section */
+        .team-section {
+            margin: 4rem 0;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .team-member {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            transform: translateY(20px);
+            opacity: 0;
+            text-align: center;
+        }
+
+        .team-member.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px) !important;
+            box-shadow: 0 15px 30px rgba(229, 9, 20, 0.3);
+        }
+
+        .member-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .member-info {
+            padding: 1.5rem;
+        }
+
+        .member-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .member-info p {
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .member-social {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .member-social a {
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .member-social a:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 3rem 5%;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-column h3 {
+            color: var(--text);
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-column ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: var(--text);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+            box-shadow: 0 5px 15px rgba(229, 9, 20, 0.4);
+        }
+
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: var(--primary-dark);
+            transform: translateY(-5px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .page-header h1 {
+                font-size: 2.8rem;
+            }
+            
+            .flash-card {
+                padding: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem 5%;
+            }
+            
+            .navbar .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: var(--dark);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: right 0.5s ease;
+                z-index: 1000;
+            }
+            
+            .navbar .nav-links.active {
+                right: 0;
+            }
+            
+            .navbar .nav-links li {
+                margin: 1.5rem 0;
+            }
+            
+            .navbar .hamburger {
+                display: block;
+                z-index: 1001;
+            }
+            
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .flash-card {
+                padding: 2rem;
+            }
+            
+            .flash-card h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .page-header p {
+                font-size: 1rem;
+            }
+            
+            .flash-card {
+                padding: 1.5rem;
+            }
+            
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Animations */
-        @keyframes fadeUp {
-            to {
-                opacity: 1;
+        @keyframes float {
+            0%, 100% {
                 transform: translateY(0);
             }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
+            50% {
+                transform: translateY(-10px);
             }
         }
 
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Background Image -->
-    <div class="background-image"></div>
+    <!-- Background with Parallax -->
+    <div class="background-container">
+        <div class="background-image" id="parallaxBg"></div>
+    </div>
+    <div class="overlay"></div>
 
     <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo">AnimeDB</div>
-        <ul class="nav-links">
+    <nav class="navbar" id="navbar">
+        <a href="index.php" class="logo">
+            <i class="fas fa-play-circle"></i> AnimeDB
+        </a>
+        <ul class="nav-links" id="navLinks">
             <li><a href="index.php">Home</a></li>
-            <li><a href="about.html">About</a></li>
+            <li><a href="about.html" class="active">About</a></li>
             <li><a href="genres.html">Genres</a></li>
-            <li><a href="#">My List</a></li>
+            <li><a href="mylist.html">My List</a></li>
+            <li><a href="contact.html">Contact</a></li>
         </ul>
+        <div class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
     </nav>
 
     <!-- Content Section -->
     <div class="content-section">
+        <div class="page-header">
+            <h1>About AnimeDB</h1>
+            <p>Your ultimate platform for managing and discovering anime. Built by fans, for fans.</p>
+        </div>
 
         <!-- Project Introduction Flashcard -->
-        <div class="flash-card">
+        <div class="flash-card" id="intro">
             <h2>Welcome to AnimeDB</h2>
-            <p>AnimeDB is a web-based platform built to manage and track your anime titles. Keep a record of anime you've watched, are currently watching, or plan to watch. Manage details like genre, ratings, reviews, and more!</p>
+            <p>AnimeDB is a comprehensive web-based platform designed to help anime enthusiasts manage their anime collections, discover new titles, and connect with other fans. Our mission is to provide the most intuitive and feature-rich anime database experience on the web.</p>
+            <p>Whether you're a casual viewer or a hardcore otaku, AnimeDB offers tools to track your progress, rate shows, write reviews, and build personalized watchlists across all your devices.</p>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <div class="stat-card" id="stat1">
+                <div class="number">10,000+</div>
+                <div class="label">Anime Titles</div>
+            </div>
+            <div class="stat-card" id="stat2">
+                <div class="number">500,000+</div>
+                <div class="label">Active Users</div>
+            </div>
+            <div class="stat-card" id="stat3">
+                <div class="number">5M+</div>
+                <div class="label">Reviews</div>
+            </div>
+            <div class="stat-card" id="stat4">
+                <div class="number">24/7</div>
+                <div class="label">Availability</div>
+            </div>
         </div>
 
         <!-- Project Overview Flashcard -->
-        <div class="flash-card">
+        <div class="flash-card" id="overview">
             <h2>Project Overview</h2>
-            <p>This project helps users organize their anime collection in a beautiful, easy-to-use interface. With CRUD (Create, Read, Update, Delete) operations and a dynamic database, AnimeDB is a powerful tool for any anime fan.</p>
-        </div>
-
-        <!-- Features Flashcard -->
-        <div class="flash-card">
-            <h2>Key Features</h2>
+            <p>AnimeDB was born from our passion for anime and the need for a better way to organize our growing watchlists. What started as a personal project has grown into a full-featured platform serving anime fans worldwide.</p>
+            <p>Our system combines comprehensive anime data with powerful personalization tools, allowing you to:</p>
             <ul>
-                <li>Store and manage your favorite anime.</li>
-                <li>Track your progress and status (Watching, Completed, etc.).</li>
-                <li>Sort by genre, release year, or ratings.</li>
-                <li>Leave reviews and feedback for each anime.</li>
-                <li>Responsive design for all devices.</li>
+                <li>Track your watching progress with detailed episode counters</li>
+                <li>Rate and review anime with our 10-point system</li>
+                <li>Create custom lists and collections</li>
+                <li>Receive personalized recommendations</li>
+                <li>Share your profile with other fans</li>
             </ul>
         </div>
 
-        <!-- Technical Details Flashcard -->
-        <div class="flash-card">
-            <h2>Technical Details</h2>
-            <p>AnimeDB is built using PHP and PDO for secure and efficient database management. The system uses modern web technologies to provide a seamless experience for users, allowing them to manage their anime data easily and securely.</p>
+        <!-- Features Section -->
+        <div class="flash-card" id="features">
+            <h2>Key Features</h2>
+            <p>AnimeDB offers a rich set of features designed to enhance your anime watching experience:</p>
+            
+            <div class="feature-cards">
+                <div class="feature-card" id="feature1">
+                    <i class="fas fa-tasks"></i>
+                    <h3>Watchlist Management</h3>
+                    <p>Easily organize your anime into Watching, Completed, On-Hold, Dropped, and Plan-to-Watch categories with our intuitive interface.</p>
+                </div>
+                
+                <div class="feature-card" id="feature2">
+                    <i class="fas fa-star"></i>
+                    <h3>Advanced Rating System</h3>
+                    <p>Rate anime on a 10-point scale with decimal precision. View detailed statistics and compare your ratings with the community.</p>
+                </div>
+                
+                <div class="feature-card" id="feature3">
+                    <i class="fas fa-search"></i>
+                    <h3>Powerful Search</h3>
+                    <p>Find exactly what you're looking for with our advanced search filters by genre, year, studio, duration, and more.</p>
+                </div>
+                
+                <div class="feature-card" id="feature4">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Cross-Platform Sync</h3>
+                    <p>Access your anime list from any device. Our responsive design works perfectly on desktop, tablet, and mobile.</p>
+                </div>
+                
+                <div class="feature-card" id="feature5">
+                    <i class="fas fa-users"></i>
+                    <h3>Community Features</h3>
+                    <p>Follow other users, see what they're watching, and discover new anime through our social features.</p>
+                </div>
+                
+                <div class="feature-card" id="feature6">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Statistics</h3>
+                    <p>View detailed charts and graphs of your watching habits, genre preferences, and rating distribution.</p>
+                </div>
+            </div>
         </div>
 
+        <!-- Technical Details Flashcard -->
+        <div class="flash-card" id="tech">
+            <h2>Technical Details</h2>
+            <p>AnimeDB is built with modern web technologies to ensure performance, security, and scalability:</p>
+            <ul>
+                <li><strong>Frontend:</strong> HTML5, CSS3, JavaScript (ES6+), with responsive design principles</li>
+                <li><strong>Backend:</strong> PHP 8.1 with PDO for secure database interactions</li>
+                <li><strong>Database:</strong> MySQL with optimized queries and indexing</li>
+                <li><strong>Security:</strong> Prepared statements, CSRF protection, and data validation</li>
+                <li><strong>Performance:</strong> Caching strategies and optimized asset delivery</li>
+                <li><strong>APIs:</strong> Integration with MyAnimeList and AniList for comprehensive data</li>
+            </ul>
+            <p>Our architecture is designed to handle thousands of concurrent users while maintaining fast response times and data integrity.</p>
+        </div>
+
+        <!-- Team Section -->
+        <div class="flash-card" id="team">
+            <h2>Our Team</h2>
+            <p>AnimeDB is developed by a small team of passionate anime fans and experienced developers:</p>
+            
+            <div class="team-section">
+                <div class="team-grid">
+                    <div class="team-member" id="member1">
+                        <img src="assets/reheinhart.png" alt="Team Member" class="member-image">
+                        <div class="member-info">
+                            <h3>Reinhard van Astrea</h3>
+                            <p>Lead Developer</p>
+                            <div class="member-social">
+                                <a href="#"><i class="fab fa-github"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="team-member" id="member2">
+                        <img src="assets/reheinhart.png" alt="Team Member" class="member-image">
+                        <div class="member-info">
+                            <h3>Reinhard van Astrea</h3>
+                            <p>UI/UX Designer</p>
+                            <div class="member-social">
+                                <a href="#"><i class="fab fa-dribbble"></i></a>
+                                <a href="#"><i class="fab fa-behance"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="team-member" id="member3">
+                        <img src="assets/reheinhart.png" alt="Team Member" class="member-image">
+                        <div class="member-info">
+                            <h3>Reinhard van Astrea</h3>
+                            <p>Database Architect</p>
+                            <div class="member-social">
+                                <a href="#"><i class="fab fa-stack-overflow"></i></a>
+                                <a href="#"><i class="fab fa-gitlab"></i></a>
+                                <a href="#"><i class="fab fa-medium"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="team-member" id="member4">
+                        <img src="assets/reheinhart.png" alt="Team Member" class="member-image">
+                        <div class="member-info">
+                            <h3>Reinhard van Astrea</h3>
+                            <p>Community Manager</p>
+                            <div class="member-social">
+                                <a href="#"><i class="fab fa-discord"></i></a>
+                                <a href="#"><i class="fab fa-reddit"></i></a>
+                                <a href="#"><i class="fab fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Roadmap Flashcard -->
+        <div class="flash-card" id="roadmap">
+            <h2>Future Roadmap</h2>
+            <p>We're constantly working to improve AnimeDB. Here's what's coming next:</p>
+            <ul>
+                <li><strong>Mobile Apps:</strong> Native iOS and Android applications for on-the-go access</li>
+                <li><strong>Watch Parties:</strong> Synchronized watching with friends and community</li>
+                <li><strong>Advanced Recommendations:</strong> Machine learning-powered suggestions</li>
+                <li><strong>Manga Integration:</strong> Track your manga reading alongside anime</li>
+                <li><strong>Custom Themes:</strong> Personalize your AnimeDB experience</li>
+                <li><strong>API Access:</strong> For developers to build their own tools</li>
+            </ul>
+            <p>Have suggestions? We'd love to hear from you on our forums or through our contact page!</p>
+        </div>
     </div>
 
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>AnimeDB</h3>
+                <p>Your ultimate anime tracking platform. Built with passion for anime fans worldwide.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="genres.html">Genres</a></li>
+                    <li><a href="mylist.html">My List</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#">API Documentation</a></li>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Community Guidelines</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Connect</h3>
+                <ul>
+                    <li><a href="#">Forums</a></li>
+                    <li><a href="#">Discord Server</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">Facebook Group</a></li>
+                    <li><a href="#">Reddit Community</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            &copy; 2023 AnimeDB. All rights reserved. All anime titles and images are property of their respective owners.
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            // Back to top button
+            const backToTop = document.getElementById('backToTop');
+            if (window.scrollY > 300) {
+                backToTop.classList.add('active');
+            } else {
+                backToTop.classList.remove('active');
+            }
+        });
+
+        // Mobile menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        
+        hamburger.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            hamburger.innerHTML = navLinks.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                if (navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+        });
+
+        // Back to top functionality
+        document.getElementById('backToTop').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Parallax effect for background
+        window.addEventListener('scroll', function() {
+            const scrollPosition = window.scrollY;
+            document.getElementById('parallaxBg').style.transform = `translateY(${scrollPosition * 0.3}px)`;
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.flash-card, .feature-card, .stat-card, .team-member').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
